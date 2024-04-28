@@ -1,8 +1,7 @@
 package com.sk.userservice.controllers;
 
-import com.sk.userservice.dtos.LoginRequestDto;
-import com.sk.userservice.dtos.SignUpRequestDto;
-import com.sk.userservice.dtos.UserResponseDto;
+import com.sk.userservice.dtos.*;
+import com.sk.userservice.exceptions.InvalidTokenException;
 import com.sk.userservice.models.Token;
 import com.sk.userservice.models.User;
 import com.sk.userservice.services.UserService;
@@ -42,13 +41,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Token login(@RequestBody LoginRequestDto loginRequestDto) {
-        return null;
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        Token token = userService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        loginResponseDto.setToken(token);
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logOut(@RequestBody LoginRequestDto loginRequestDto) {
-        return null;
+    public ResponseEntity<Void> logOut(@RequestBody LogoutRequestDto logoutRequestDto) {
+        try {
+            userService.logout(logoutRequestDto.getToken());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InvalidTokenException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
-
 }
