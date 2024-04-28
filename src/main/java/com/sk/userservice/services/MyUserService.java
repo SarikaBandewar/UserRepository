@@ -85,4 +85,13 @@ public class MyUserService implements UserService {
         toDelete.setIsDeleted(true);
         tokenRepository.save(toDelete);
     }
+
+    @Override
+    public User validateToken(String token) throws InvalidTokenException {
+        Optional<Token> optionalToken = tokenRepository.findByTokenValueAndIsDeleted(token, false);
+        if (optionalToken.isEmpty()) {
+            throw new InvalidTokenException();
+        }
+        return optionalToken.get().getUser();
+    }
 }

@@ -57,4 +57,14 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/validate/{token}")
+    public UserResponseDto validateToken (@PathVariable String token) {
+        try {
+            User user = userService.validateToken(token);
+            return UserResponseDto.from(user);
+        } catch (InvalidTokenException e) {
+            return null;
+        }
+    }
 }
