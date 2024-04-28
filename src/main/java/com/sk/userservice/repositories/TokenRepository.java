@@ -14,4 +14,7 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     // select * from token where value ='value' and is_deleted = false
 
     Optional<Token> findByTokenValueAndIsDeleted(String token, boolean isDeleted);
+
+    Optional<Token> findByUserIdAndIsDeleted(Long userId, boolean isDeleted);
+
 }

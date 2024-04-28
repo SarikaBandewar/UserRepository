@@ -55,6 +55,14 @@ public class MyUserService implements UserService {
             throw new BadCredentialsException("Wrong password");
         }
         // login successful, generate new token
+        Optional<Token> optionalToken = tokenRepository.findByUserIdAndIsDeleted(user.getId(), false);
+        if (optionalToken.isPresent()) {
+            Date currentDate = new Date();
+            if (currentDate.before(optionalToken.get().getExpireAt())) {
+                return optionalToken.get();
+            }
+        }
+
         Token token = generateToken(user);
         return tokenRepository.save(token);
     }
