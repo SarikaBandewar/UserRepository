@@ -19,6 +19,7 @@ public class CustomUserDetails implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
     private List<GrantedAuthority> authorities;
+    private Long userId;
 
     public CustomUserDetails(){}
 
@@ -33,6 +34,11 @@ public class CustomUserDetails implements UserDetails {
         for (Role role : user.getRoles()) {
             authorities.add(new CustomGrantedAuthority(role));
         }
+        this.userId = user.getId();
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
