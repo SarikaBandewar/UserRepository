@@ -71,25 +71,27 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
-                .formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults())
+                .csrf().disable()
+                .cors().disable();
 
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder()
-                .username("user")
-                .password("$2a$12$SU44/c/dZKZ6l6ZgTDFZTOd9h6T7tU6gJO0ca.cHvqAVl0jG19GBa")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(userDetails);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails userDetails = User.builder()
+//                .username("user")
+//                .password("$2a$12$SU44/c/dZKZ6l6ZgTDFZTOd9h6T7tU6gJO0ca.cHvqAVl0jG19GBa")
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(userDetails);
+//    }
 
 //    @Bean
 //    public RegisteredClientRepository registeredClientRepository() {

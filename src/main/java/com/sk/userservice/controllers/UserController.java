@@ -19,6 +19,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Void> goHome() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signUp(@RequestBody SignUpRequestDto userDto) {
 
